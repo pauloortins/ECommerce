@@ -28,6 +28,16 @@ namespace ECommerce.Domain.AgregadoPedido
 
         public Pedido FinalizarCompra(FormaPagamento formaPagamento)
         {
+            var pedido = CriarPedido(formaPagamento);
+
+            DarBaixaNoEstoque();            
+            EsvaziarCarrinho();
+
+            return pedido;
+        }
+
+        private Pedido CriarPedido(FormaPagamento formaPagamento)
+        {
             var pedido = new Pedido
                              {
                                  FormaPagamento = formaPagamento,
@@ -35,10 +45,6 @@ namespace ECommerce.Domain.AgregadoPedido
                              };
 
             pedido.ItensPedido.AddRange(this.ItensPedido);
-
-            DarBaixaNoEstoque();            
-            EsvaziarCarrinho();
-
             return pedido;
         }
 
