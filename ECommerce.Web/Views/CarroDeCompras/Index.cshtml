@@ -1,0 +1,55 @@
+﻿@using ECommerce.Domain.AgregadoPedido;
+@model ECommerce.Domain.AgregadoPedido.CarroDeCompras
+@{
+    ViewBag.Title = "title";
+}
+<h2>
+    Meu Carrinho de Compras</h2>
+@foreach (var itemPedido in Model.ItensPedido)
+{
+    using (Html.BeginForm("RemoverProduto", "CarroDeCompras", FormMethod.Post))
+    {
+    <div>
+        Produto: @itemPedido.Produto.Nome
+        <br />
+        Quantidade: @itemPedido.Quantidade
+        <br />
+        Preço: @itemPedido.Produto.Preco.ToString("N2")
+        <br />
+        Total: R$@itemPedido.CalcularPreco().ToString("N2")
+        <br />
+        
+        @Html.Hidden("idProduto", itemPedido.Produto.Id)
+        <input type="submit" value="Remover produto"/>
+    </div>
+    <br />    
+    }
+}
+<div id="total">
+    Total: R$@Model.CalcularPreco().ToString("N2")
+</div>
+@using (Html.BeginForm("FinalizarCompra", "CarroDeCompras"))
+{
+    <div id="formaPagamento">
+        <br />
+        @Html.RadioButton(name: "idFormaPagamento", value: FormaPagamento.Boleto.Id, isChecked: true)
+        <span>@FormaPagamento.Boleto.Nome</span>
+        <br />
+        @Html.RadioButton(name: "idFormaPagamento", value: FormaPagamento.CartaoCreditoMaster.Id)
+        <span>@FormaPagamento.CartaoCreditoMaster.Nome</span>
+        <br />
+        @Html.RadioButton(name: "idFormaPagamento", value: FormaPagamento.CartaoCreditoVisa.Id)
+        <span>@FormaPagamento.CartaoCreditoVisa.Nome</span>
+        <br />
+    </div>
+
+    <div>
+        <br />
+        <input type="submit" value="Finalizar Pedido" />
+    </div>
+}
+<div id="mensagem">
+    <br />
+    @TempData["Mensagem"]
+    <br />
+</div>

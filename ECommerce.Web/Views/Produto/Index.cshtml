@@ -1,0 +1,32 @@
+﻿@model List<ECommerce.Domain.AgregadoProduto.Produto>
+@{
+    ViewBag.Title = "Index";
+}
+<h3>
+    Lista de Produtos</h3>
+@foreach (var produto in Model)
+{
+    using (Html.BeginForm("AdicionarItem", "CarroDeCompras", FormMethod.Post))
+    {
+    <div>
+        @Html.Hidden("idProduto", produto.Id)
+        Nome: @produto.Nome
+        <br />
+        Quantidade em Estoque: @produto.QuantidadeEmEstoque
+        <br />
+        Preço: R$@produto.Preco.ToString("N2")
+        <br />
+        Quantidade:
+        @Html.TextBox("quantidade", string.Empty, new { @type = "number", required = "required", pattern = "\\d+" })
+        <br/>
+        <input type="submit" value="Adicionar ao carrinho" />
+    </div>
+    <br />
+    }
+}
+
+<div id="mensagem">
+    <br />
+    @TempData["Mensagem"]
+    <br />
+</div>
